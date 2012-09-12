@@ -1,0 +1,81 @@
+Last login: Sat Aug 25 17:59:22 on ttys003
+~ >: cd /Users/ChrisClark/Dropbox/baseball/bottomofthe/components/game/mlb/year_2012/month_05/day_13/
+~/Dropbox/baseball/bottomofthe/components/game/mlb/year_2012/month_05/day_13 >: l
+total 264
+drwxr-xr-x  21 ChrisClark  staff    714 Aug 25 14:44 .
+drwxr-xr-x  15 ChrisClark  staff    510 Aug 25 14:43 ..
+-rw-r--r--   1 ChrisClark  staff  37622 Aug 24 17:20 epg.xml
+-rw-r--r--@  1 ChrisClark  staff   4325 Aug 24 17:20 games.html
+drwxr-xr-x   9 ChrisClark  staff    306 Aug 25 14:46 gid_2012_05_13_anamlb_texmlb_1
+drwxr-xr-x   9 ChrisClark  staff    306 Aug 25 14:46 gid_2012_05_13_atlmlb_slnmlb_1
+drwxr-xr-x   9 ChrisClark  staff    306 Aug 25 14:46 gid_2012_05_13_chnmlb_milmlb_1
+drwxr-xr-x   9 ChrisClark  staff    306 Aug 25 14:46 gid_2012_05_13_clemlb_bosmlb_1
+drwxr-xr-x   9 ChrisClark  staff    306 Aug 25 14:46 gid_2012_05_13_colmlb_lanmlb_1
+drwxr-xr-x   9 ChrisClark  staff    306 Aug 25 14:46 gid_2012_05_13_detmlb_oakmlb_1
+drwxr-xr-x  10 ChrisClark  staff    340 Aug 25 14:46 gid_2012_05_13_houmlb_pitmlb_1
+drwxr-xr-x   9 ChrisClark  staff    306 Aug 25 14:46 gid_2012_05_13_kcamlb_chamlb_1
+drwxr-xr-x   9 ChrisClark  staff    306 Aug 25 14:46 gid_2012_05_13_nynmlb_miamlb_1
+drwxr-xr-x   9 ChrisClark  staff    306 Aug 25 14:46 gid_2012_05_13_sdnmlb_phimlb_1
+drwxr-xr-x   9 ChrisClark  staff    306 Aug 25 14:46 gid_2012_05_13_seamlb_nyamlb_1
+drwxr-xr-x   9 ChrisClark  staff    306 Aug 25 14:46 gid_2012_05_13_sfnmlb_arimlb_1
+drwxr-xr-x  23 ChrisClark  staff    782 Aug 25 17:29 gid_2012_05_13_tbamlb_balmlb_1
+drwxr-xr-x  23 ChrisClark  staff    782 Aug 25 14:45 gid_2012_05_13_tormlb_minmlb_1
+drwxr-xr-x  23 ChrisClark  staff    782 Aug 25 14:44 gid_2012_05_13_wasmlb_cinmlb_1
+~/Dropbox/baseball/bottomofthe/components/game/mlb/year_2012/month_05/day_13 >: cd gid_2012_05_13_anamlb_texmlb_1/
+~/Dropbox/baseball/bottomofthe/components/game/mlb/year_2012/month_05/day_13/gid_2012_05_13_anamlb_texmlb_1 >: l
+total 8
+drwxr-xr-x   9 ChrisClark  staff   306 Aug 25 14:46 .
+drwxr-xr-x  21 ChrisClark  staff   714 Aug 25 14:44 ..
+drwxr-xr-x  62 ChrisClark  staff  2108 Aug 25 17:26 batters
+-rw-r--r--@  1 ChrisClark  staff   772 Aug 24 17:21 game.xml
+drwxr-xr-x   2 ChrisClark  staff    68 Aug 24 17:21 inning
+drwxr-xr-x   3 ChrisClark  staff   102 Aug 25 14:46 media
+drwxr-xr-x   5 ChrisClark  staff   170 Aug 25 14:46 notifications
+drwxr-xr-x   4 ChrisClark  staff   136 Aug 25 14:46 onbase
+drwxr-xr-x  46 ChrisClark  staff  1564 Aug 25 17:26 pitchers
+~/Dropbox/baseball/bottomofthe/components/game/mlb/year_2012/month_05/day_13/gid_2012_05_13_anamlb_texmlb_1 >: cat game.xml
+<!--Copyright 2012 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt--><game type="R" local_game_time="19:05" game_pk="318237" game_time_et="08:05 PM" gameday_sw="P">
+	<team type="home" code="tex" file_code="tex" abbrev="TEX" id="140" name="Texas" name_full="Texas Rangers" name_brief="Rangers" w="23" l="12" division_id="200" league_id="103" league="AL"/>
+	<team type="away" code="ana" file_code="ana" abbrev="LAA" id="108" name="LA Angels" name_full="Los Angeles Angels" name_brief="Angels" w="15" l="20" division_id="200" league_id="103" league="AL"/>
+	<stadium id="13" name="Rangers Ballpark in Arlington" venue_w_chan_loc="USTX0045" location="Arlington, TX"/>
+</game>~/Dropbox/baseball/bottomofthe/components/game/mlb/year_2012/month_05/day_13/gid_2012_05_13_anamlb_texmlb_1 >: irb
+1.9.3-p194 :001 > require 'hpricot'
+ => true 
+1.9.3-p194 :002 > IO.read('game.xml')
+ => "<!--Copyright 2012 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt--><game type=\"R\" local_game_time=\"19:05\" game_pk=\"318237\" game_time_et=\"08:05 PM\" gameday_sw=\"P\">\n\t<team type=\"home\" code=\"tex\" file_code=\"tex\" abbrev=\"TEX\" id=\"140\" name=\"Texas\" name_full=\"Texas Rangers\" name_brief=\"Rangers\" w=\"23\" l=\"12\" division_id=\"200\" league_id=\"103\" league=\"AL\"/>\n\t<team type=\"away\" code=\"ana\" file_code=\"ana\" abbrev=\"LAA\" id=\"108\" name=\"LA Angels\" name_full=\"Los Angeles Angels\" name_brief=\"Angels\" w=\"15\" l=\"20\" division_id=\"200\" league_id=\"103\" league=\"AL\"/>\n\t<stadium id=\"13\" name=\"Rangers Ballpark in Arlington\" venue_w_chan_loc=\"USTX0045\" location=\"Arlington, TX\"/>\n</game>" 
+1.9.3-p194 :003 > s= IO.read('game.xml')
+ => "<!--Copyright 2012 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt--><game type=\"R\" local_game_time=\"19:05\" game_pk=\"318237\" game_time_et=\"08:05 PM\" gameday_sw=\"P\">\n\t<team type=\"home\" code=\"tex\" file_code=\"tex\" abbrev=\"TEX\" id=\"140\" name=\"Texas\" name_full=\"Texas Rangers\" name_brief=\"Rangers\" w=\"23\" l=\"12\" division_id=\"200\" league_id=\"103\" league=\"AL\"/>\n\t<team type=\"away\" code=\"ana\" file_code=\"ana\" abbrev=\"LAA\" id=\"108\" name=\"LA Angels\" name_full=\"Los Angeles Angels\" name_brief=\"Angels\" w=\"15\" l=\"20\" division_id=\"200\" league_id=\"103\" league=\"AL\"/>\n\t<stadium id=\"13\" name=\"Rangers Ballpark in Arlington\" venue_w_chan_loc=\"USTX0045\" location=\"Arlington, TX\"/>\n</game>" 
+1.9.3-p194 :004 > doc = Hpricot(s)
+ => #<Hpricot::Doc {comment "<!--Copyright 2012 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt-->"} {elem <game type="R" local_game_time="19:05" game_pk="318237" game_time_et="08:05 PM" gameday_sw="P"> "\n\t" {emptyelem <team type="home" code="tex" file_code="tex" abbrev="TEX" id="140" name="Texas" name_full="Texas Rangers" name_brief="Rangers" w="23" l="12" division_id="200" league_id="103" league="AL">} "\n\t" {emptyelem <team type="away" code="ana" file_code="ana" abbrev="LAA" id="108" name="LA Angels" name_full="Los Angeles Angels" name_brief="Angels" w="15" l="20" division_id="200" league_id="103" league="AL">} "\n\t" {emptyelem <stadium id="13" name="Rangers Ballpark in Arlington" venue_w_chan_loc="USTX0045" location="Arlington, TX">} "\n" </game>}> 
+1.9.3-p194 :005 > doc.at("game")
+ => {elem <game type="R" local_game_time="19:05" game_pk="318237" game_time_et="08:05 PM" gameday_sw="P"> "\n\t" {emptyelem <team type="home" code="tex" file_code="tex" abbrev="TEX" id="140" name="Texas" name_full="Texas Rangers" name_brief="Rangers" w="23" l="12" division_id="200" league_id="103" league="AL">} "\n\t" {emptyelem <team type="away" code="ana" file_code="ana" abbrev="LAA" id="108" name="LA Angels" name_full="Los Angeles Angels" name_brief="Angels" w="15" l="20" division_id="200" league_id="103" league="AL">} "\n\t" {emptyelem <stadium id="13" name="Rangers Ballpark in Arlington" venue_w_chan_loc="USTX0045" location="Arlington, TX">} "\n" </game>} 
+1.9.3-p194 :006 > doc.at("game")['type']
+ => "R" 
+1.9.3-p194 :007 > doc.at("game")['local_game_time']
+ => "19:05" 
+1.9.3-p194 :008 > doc.at("team"_
+1.9.3-p194 :009?>   ^C
+1.9.3-p194 :009 > ^C
+1.9.3-p194 :009 > 
+1.9.3-p194 :010 >   doc.at("team")
+ => {emptyelem <team type="home" code="tex" file_code="tex" abbrev="TEX" id="140" name="Texas" name_full="Texas Rangers" name_brief="Rangers" w="23" l="12" division_id="200" league_id="103" league="AL">} 
+1.9.3-p194 :011 > doc.at("team")[
+1.9.3-p194 :012 >     c
+1.9.3-p194 :013?>   ^C
+1.9.3-p194 :013 > 
+1.9.3-p194 :014 >   c^C
+1.9.3-p194 :014 > 
+1.9.3-p194 :015 >   ^C
+1.9.3-p194 :015 > doc.at("team")['type']
+ => "home" 
+1.9.3-p194 :016 > doc.search("team"){|t| puts t['type']}
+home
+away
+ => #<Hpricot::Doc {comment "<!--Copyright 2012 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt-->"} {elem <game type="R" local_game_time="19:05" game_pk="318237" game_time_et="08:05 PM" gameday_sw="P"> "\n\t" {emptyelem <team type="home" code="tex" file_code="tex" abbrev="TEX" id="140" name="Texas" name_full="Texas Rangers" name_brief="Rangers" w="23" l="12" division_id="200" league_id="103" league="AL">} "\n\t" {emptyelem <team type="away" code="ana" file_code="ana" abbrev="LAA" id="108" name="LA Angels" name_full="Los Angeles Angels" name_brief="Angels" w="15" l="20" division_id="200" league_id="103" league="AL">} "\n\t" {emptyelem <stadium id="13" name="Rangers Ballpark in Arlington" venue_w_chan_loc="USTX0045" location="Arlington, TX">} "\n" </game>}> 
+1.9.3-p194 :017 > doc.search("team").class
+ => Hpricot::Elements 
+1.9.3-p194 :018 > doc.at("game")['type']
+ => "R" 
+1.9.3-p194 :019 > doc.at("game")['time']
+ => nil 
+1.9.3-p194 :020 > doc.at("game")[""]

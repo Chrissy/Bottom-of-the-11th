@@ -1,0 +1,16 @@
+svg {
+  background-color: #333;
+  margin: 20px auto;
+}
+
+#surface {
+  position: relative;
+}
+
+#surface .details {
+  position: absolute;
+  padding: 10px;
+  box-shadow: (rgba(0,0,0,0.7)3px,3px,10px);
+  background-color: black;
+  color: white;
+}
