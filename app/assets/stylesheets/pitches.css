@@ -5,6 +5,8 @@ svg {
 
 #surface {
   position: relative;
+  width: 600px;
+  float: left;
 }
 
 #surface .details {
@@ -13,4 +15,9 @@ svg {
   box-shadow: (rgba(0,0,0,0.7)3px,3px,10px);
   background-color: black;
   color: white;
+}
+
+nav {
+  float: left;
+  margin: 20px;
 }

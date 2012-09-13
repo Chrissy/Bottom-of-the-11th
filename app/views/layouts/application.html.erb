@@ -10,5 +10,30 @@
 
 <%= yield %>
 
+<nav>
+  <%= form_tag("pitches/find_by_date", :method => "get", :id => "find-by-date") do %>
+    <%= date_select(:date_of, "date-of", :start_year => 2005)%>
+    <%= submit_tag("Find") %>
+  <% end %>
+  <%= form_tag("pitches/find_game", :method => "get", :id => "find-game") do %>
+    <select>
+      <option>Select a date first</option>
+    </select>
+    <%= submit_tag("Find") %>
+  <% end %>
+  <%= form_tag("pitches/find_team", :method => "get", :id => "find-pitcher") do %>
+    <select id="pitchers">
+      <options>Select game first</options>
+    </select>
+    <%= submit_tag("Find pitcher") %>
+  <% end %>
+  <%= form_tag("pitches/find_team", :method => "get", :id => "find-batter") do %>
+    <select id="batters">
+      <options>Select game first</options>
+    </select>
+    <%= submit_tag("Find batter") %>
+  <% end %>
+</nav>
+
 </body>
 </html>
