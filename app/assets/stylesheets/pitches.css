@@ -1,23 +1,39 @@
+body {
+  font-family: sans-serif;
+}
+
 svg {
   background-color: #333;
   margin: 20px auto;
 }
 
-#surface {
+.surface {
   position: relative;
   width: 600px;
   float: left;
 }
 
-#surface .details {
+.surface .details {
   position: absolute;
   padding: 10px;
   box-shadow: (rgba(0,0,0,0.7)3px,3px,10px);
   background-color: black;
   color: white;
+  width: 100px;
+  font-size: 12px;
+  list-style-type: none;
 }
 
+select { width: 300px; }
+
 nav {
-  float: left;
+  position: absolute;
+  right: 0;
   margin: 20px;
+}
+
+#cal-primary {
+  position: absolute;
+  top: 60px;
+  right: 20px;
 }

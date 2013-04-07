@@ -12,5 +12,12 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require raphael-min
-//= require_tree .
+//= require lib/raphael-min
+//= require lib/kalendae.min
+//= require lib/jquery-ui.min
+//= require lib/chosen.jquery
+//= require classes/Calendar
+//= require classes/Select
+//= require classes/Surface
+//= require events/pitches_events
+

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  id: 1
+  first: MyString
+  last: MyString
+  team_abbrev: MyString
+
+two:
+  id: 1
+  first: MyString
+  last: MyString
+  team_abbrev: MyString

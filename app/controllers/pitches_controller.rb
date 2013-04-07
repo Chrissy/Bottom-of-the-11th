@@ -31,18 +31,15 @@ class PitchesController < ApplicationController
   end
   
   def get_pitches
-    if params[:gid] 
-      @game = Game.new(params[:gid])
-    else 
-      games = Game.find_by_date(2012,5,13)
-      @game = games[0]
-    end
-    @pitches_with_pitchers = []
-    atBats = @game.get_atbats()
-    
-    atBats.each do |atbat|
-        atbat.pitches.each do |pitch|
-          @pitches_with_pitchers << [pitch,atbat.pitcher_id,atbat.batter_id]
+    if params[:pid] && params[:dates] 
+      @pitches_with_pitchers = []
+      player = PlayerId.find(params[:pid])
+      params[:dates].each do |date|
+        begin 
+          @pitches_with_pitchers.concat(player.performance(date).pitches)
+        rescue 
+          puts "there was an error"
+        end
       end
     end
     
@@ -57,6 +54,13 @@ class PitchesController < ApplicationController
     @pitchers = game.get_pitching()
     @batters[0] = game.get_batters("home")
     @batters[1] = game.get_batters("away")
+    respond_to do |format|
+      format.json {}
+    end
+  end
+
+  def dates
+    @dates = PlayerId.find(params[:pid]).performances.map(&:date_array)
     respond_to do |format|
       format.json {}
     end
