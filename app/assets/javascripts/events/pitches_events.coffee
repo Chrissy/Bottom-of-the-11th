@@ -14,12 +14,15 @@ $ ->
   calendar.setupForPlayer(initPlayer)
   
   select.onChange( (self) -> 
-    self.updateCal()
-    select2.buildWithRivals(initPlayer)
+    if select2.sel.val() != ""
+       calendar.setupDatesForRivalry(select.sel.val(), select2.sel.val())
+    else 
+      self.updateCal()
+      select2.buildWithRivals(initPlayer)
   )
 
   select2.onChange( (self) -> 
-    self.updateCalWithCrossReferents()
+    calendar.setupDatesForRivalry(select.sel.val(), select2.sel.val())
   )  
   
   calendar.onChange( (self) -> 

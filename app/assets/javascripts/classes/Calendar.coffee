@@ -24,9 +24,9 @@ class window.Calendar
       return dates
     )
 
-  setupDatesForRivalry : (opponent_id) ->
+  setupDatesForRivalry : (playerId, opponent_id) ->
     self = @
-    @getDatesForRivalry(@playerId, opponent_id).promise().then((dates) ->
+    @getDatesForRivalry(playerId, opponent_id).promise().then((dates) ->
       self.setupDates(dates)
       self.selectLast(dates)
       self.draw(@surface)
