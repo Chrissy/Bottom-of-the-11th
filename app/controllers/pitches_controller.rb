@@ -65,5 +65,32 @@ class PitchesController < ApplicationController
       format.json {}
     end
   end
+
+  def dates_faced
+    @dates = PlayerId.find(params[:batter])
+                     .pitching_rivalry(params[:pitcher])
+                     .dates_faced
+                     
+    respond_to do |format|
+      format.json { render :template => 'pitches/dates.json.jbuilder' }
+    end
+  end 
+
+  def pitchers_faced
+    player_ids = PlayerId.find(params[:pid]).pitchers_faced
+    @players = player_ids.collect { |player_id| PlayerId.find_by_id(player_id) }
+    @players.compact!.sort! { |a, b| a.last <=> b.last }
+
+    respond_to do |format|
+      format.json { render :template => 'pitches/players.json.jbuilder' }
+    end
+  end
+
+  def all_players
+    @players = PlayerId.all
+    respond_to do |format|
+      format.json { render :template => 'pitches/players.json.jbuilder' }
+    end
+  end
   
 end

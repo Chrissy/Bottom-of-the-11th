@@ -8,6 +8,9 @@ Bottomofthe::Application.routes.draw do
   match '/pitches/get_players_in_game' => 'pitches#get_players_in_game', :as => :find
   match '/pitches/get' => 'pitches#get_pitches', :as => :find
   match '/pitches/dates' => 'pitches#dates', :as => :find
+  match '/pitches/dates_faced' => 'pitches#dates_faced', :as => :find
+  match '/pitches/pitchers_faced' => 'pitches#pitchers_faced', :as => :find
+  match '/pitches/all_players' => 'pitches#all_players', :as => :find
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

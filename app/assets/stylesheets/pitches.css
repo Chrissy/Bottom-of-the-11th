@@ -30,10 +30,14 @@ nav {
   position: absolute;
   right: 0;
   margin: 20px;
+  width: 300px;
+}
+
+.chzn-container {
+  margin-bottom: 10px;
+  float: right;
 }
 
 #cal-primary {
-  position: absolute;
-  top: 60px;
-  right: 20px;
+  float: right;
 }

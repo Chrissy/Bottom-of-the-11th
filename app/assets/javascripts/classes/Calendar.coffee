@@ -10,35 +10,43 @@ class window.Calendar
     
   setupForPlayer : (playerId) ->
     self = @
-    console.log(playerId)
-    @setupDatesForPlayer(playerId).promise().then( ->
-      self.selectLast(@autoSelectNumber).promise().then( ->
-        self.draw(@surface)
-      )
+    @setupDatesForPlayer(playerId).promise().then((dates)  ->
+      console.log(dates)
+      self.selectLast(dates)
+      self.draw(@surface)
     )
 
   setupDatesForPlayer : (playerId) ->
+    self = @
     @playerId = playerId
+    @getDatesForPlayer(playerId).promise().then((dates) ->
+      self.setupDates(dates)
+      return dates
+    )
+
+  setupDatesForRivalry : (opponent_id) ->
+    self = @
+    @getDatesForRivalry(@playerId, opponent_id).promise().then((dates) ->
+      self.setupDates(dates)
+      self.selectLast(dates)
+      self.draw(@surface)
+    )
+
+  setupDates : (dates) ->
     cal = @cal 
     self = @
-    @cal.blackout = @getDatesForPlayer(playerId).promise().then((dates) ->
-      cal.blackout = (dateToCheck) ->
-        self.returnOppositeDate(dateToCheck, dates)
-      cal.draw()
-    )
-  
-  selectLast : ->
-    return "setup blackout dates first" if !@playerId
-    self = @
-    @getDatesForPlayer(@playerId).promise().then((dates) ->
-      moments = []
-      last_dates = dates.dates.reverse().slice(0, self.autoSelectNumber)
-      for date in last_dates
-        moments.push(Kalendae.moment("#{date[0]},#{date[1]},#{date[2]}", "YYYYMD"))
-      self.cal.setSelected(moments)
-      self.cal.viewStartDate = moments[0]
-      self.cal.draw()
-    )
+    cal.blackout = (dateToCheck) ->
+      self.returnOppositeDate(dateToCheck, dates)
+    cal.draw()
+
+  selectLast : (dates) ->
+    moments = []
+    last_dates = dates.dates.reverse().slice(0, @autoSelectNumber)
+    for date in last_dates
+      moments.push(Kalendae.moment("#{date[0]},#{date[1]},#{date[2]}", "YYYYMD"))
+    @cal.setSelected(moments)
+    @cal.viewStartDate = moments[0]
+    @cal.draw()
   
   draw : ->
     self = @
@@ -61,6 +69,11 @@ class window.Calendar
     $.get("/pitches/dates.json?pid=#{pid}").then(
       (dates) -> return dates
       -> return "could not find dates"
+    )
+
+  getDatesForRivalry : (batter, pitcher) ->
+    $.get("/pitches/dates_faced.json?batter=#{batter}&pitcher=#{pitcher}").then(
+      (dates) -> return dates
     )
     
   returnOppositeDate : (dateToCheck, dates) ->

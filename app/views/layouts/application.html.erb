@@ -11,16 +11,8 @@
 <%= yield %>
 
 <nav>
-  <select id="player-1" class="chosen">
-    <% PlayerId.all.each do |player| %>
-      <option value="<%= player.id %>">
-        <%= "#{player.last}, #{player.first}" %>
-      </option>
-    <% end %>
-  </select>
+  <div id="cal-primary"></div>
 </nav>
-
-<div id="cal-primary"></div>
 
 </body>
 </html>
