@@ -7,7 +7,16 @@ class window.Surface
     @circleGraph = Raphael("surface", 600, 500)
     @lineGraphContainer = $("#surface2")
     @lineGraph = Raphael("surface2", 800, 300)
-  
+
+    width = $("#container").innerWidth()
+    height = $("#container").innerHeight()
+    @lineGraph.setViewBox(0, 0, 800, 300, true)
+    @lineGraph.setSize(width, height)
+
+    width = $("#surface").innerWidth()
+    height = $("#surface").innerHeight()
+    @circleGraph.setViewBox(0, 0, 600, 500, true)
+    @circleGraph.setSize(width, height)
 
   draw : (@data) ->
     @circleGraph.clear()
@@ -47,9 +56,9 @@ class window.Surface
 
   drawLines : (data) ->
     for pitch in data.pitches
-      x1 = 50
+      x1 = 0
       y1 = 400 - parseFloat(pitch.z0)*50
-      x2 = 700
+      x2 = 800
       y2 = parseFloat(pitch.pz)*50
       cx = (parseFloat(pitch.break_y)/12)*50
       cy = (parseFloat(pitch.pfx_z)/12)*50
