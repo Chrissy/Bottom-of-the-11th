@@ -24,12 +24,14 @@ class window.Calendar
       return dates
     )
 
-  setupDatesForRivalry : (playerId, opponent_id) ->
+  setupDatesForRivalry : (playerId, opponentId) ->
     self = @
-    @getDatesForRivalry(playerId, opponent_id).promise().then((dates) ->
+    @playerId = playerId
+    @opponentId = opponentId
+    @getDatesForRivalry(playerId, opponentId).promise().then((dates) ->
       self.setupDates(dates)
       self.selectLast(dates)
-      self.draw(@surface)
+      self.drawForRivalry()
     )
 
   setupDates : (dates) ->
@@ -48,6 +50,18 @@ class window.Calendar
     @cal.viewStartDate = moments[0]
     @cal.draw()
   
+  drawForRivalry : (pitcher_id) ->
+    self = @
+    dates = @getSelectedDatesAsArray()
+    datesString = ""
+    for date in dates
+      datesString += "&dates[]=#{date}"
+    $.ajax(
+      url: "/pitches/get.json?bid=#{self.playerId}&pid=#{self.opponentId}#{datesString}"
+    ).done((data) ->
+      self.surface.draw(data)
+    )
+
   draw : ->
     self = @
     dates = @getSelectedDatesAsArray()

@@ -6,11 +6,12 @@ class window.Select
     @sel = @select_element.chosen()
     @cal = calendar
 
-  buildWithRivals : (id) ->
+  buildWithRivals : (id, default_rival) ->
     self = @
     $.get("/pitches/pitchers_faced.json?pid=#{id}").then(
       (data) ->
         self.build(data.player_ids)
+        self.changePlayer(default_rival)
       -> 
         console.log "could not find players"
     )

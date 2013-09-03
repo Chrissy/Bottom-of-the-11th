@@ -31,15 +31,15 @@ class PitchesController < ApplicationController
   end
   
   def get_pitches
-    if params[:pid] && params[:dates] 
-      @pitches_with_pitchers = []
-      player = PlayerId.find(params[:pid])
-      params[:dates].each do |date|
-        begin 
-          @pitches_with_pitchers.concat(player.performance(date).pitches)
-        rescue 
-          puts "there was an error"
-        end
+    @pitches_with_pitchers = []
+    player = PlayerId.find(params[:pid])
+
+    params[:dates].each do |date|
+      if params[:bid]
+        pitches = RivalryPerformance.new(params[:pid], params[:bid], date).pitches
+        @pitches_with_pitchers.concat(pitches)
+      else
+        @pitches_with_pitchers.concat(player.performance(date).pitches)
       end
     end
     
@@ -69,7 +69,7 @@ class PitchesController < ApplicationController
   def dates_faced
     @dates = PlayerId.find(params[:batter])
                      .pitching_rivalry(params[:pitcher])
-                     .dates_faced
+                     .rivalry_performances.map(&:date_array)
                      
     respond_to do |format|
       format.json { render :template => 'pitches/dates.json.jbuilder' }

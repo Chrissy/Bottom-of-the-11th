@@ -64,7 +64,6 @@ class Performance
   end
   
   def at_bats
-    side = (game.home_team_abbrev == @player_id.team_abbrev) ? 'home' : 'away'
     player_at_bats = game.get_atbats.select{ |atbat| atbat.batter_id.to_i == @player_id.id }
     return player_at_bats
   end
@@ -77,8 +76,16 @@ class Performance
     return all_pitches
   end
 
+  def side
+    (game.home_team_abbrev == @player_id.team_abbrev) ? 'home' : 'away'
+  end
+
   def home?
     return true if game.home_team_abbrev == @player_id.team_abbrev 
+  end
+
+  def opponent_abbrev
+    home? ? game.visit_team_abbrev : game.home_team_abbrev
   end
 
   def pitchers_faced
@@ -88,15 +95,18 @@ class Performance
 end
 
 class Rivalry
-  attr_reader :dates_faced, :pitcher, :batter
+  attr_reader :rivalry_performances, :pitcher, :batter
 
   def initialize(player1_id, player2_id) 
     @pitcher = player1_id
     @batter = player2_id
-    dates_faced_codes = @pitcher.date_codes_array & @batter.date_codes_array
-    @dates_faced = []
-    dates_faced_codes.each do |datecode| 
-      @dates_faced << Performance.key_to_date_array(datecode) if datecode
+    pitcher_dates = @pitcher.date_codes_array
+    batter_dates = @batter.date_codes_array
+    pitcher_dates.shift
+    batter_dates.shift
+    @rivalry_performances = []
+    pitcher_dates.each do |datecode|
+      @rivalry_performances << RivalryPerformance.new(@pitcher, @batter, datecode) if Performance.new(@pitcher, datecode).opponent_abbrev == @batter.team_abbrev
     end
   end
 
@@ -108,4 +118,17 @@ class Rivalry
     PlayerId.find(@player2_id)
   end
 
+end
+
+class RivalryPerformance < Performance
+  def initialize(pitcher_int, batter_int, datecode)
+    @pitcher_int = pitcher_int
+    @batter_int = batter_int
+    pitcher_id = PlayerId.find(pitcher_int)
+    super(pitcher_id, datecode.to_s)
+  end
+
+  def at_bats
+    game.get_atbats.select{ |atbat| atbat.pitcher_id.to_i == @pitcher_int.to_i && atbat.batter_id.to_i == @batter_int.to_i }
+  end
 end
