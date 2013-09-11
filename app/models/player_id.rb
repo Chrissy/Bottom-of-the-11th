@@ -18,16 +18,26 @@ class PlayerId < ActiveRecord::Base
     return Performance.new(self, date_code)
   end
 
-  def pitchers_faced
-    pitcher_ids = []
+  def pitcher?
+    Team.new(team_abbrev).get_starters_unique(2012).map(&:pid).include?(id.to_s) || Team.new(team_abbrev).get_closers_unique(2012).map(&:pid).include?(id.to_s)
+  end
+
+  def players_faced
+    player_ids = []
+    pitcher = pitcher?
+
     performances.each do |performance|
       begin
-        pitcher_ids.concat(performance.pitchers_faced.uniq)
+        if pitcher
+          player_ids.concat(performance.batters_faced.uniq)
+        else
+          player_ids.concat(performance.pitchers_faced.uniq)
+        end
       rescue
         puts "...failed to load pitchers for #{performance.formatted_date}"
       end
     end
-    pitcher_ids.uniq
+    player_ids.uniq
   end
 
   def pitching_rivalry(pid)
@@ -91,6 +101,10 @@ class Performance
   def pitchers_faced
     game.get_pitchers(home? ? 'away' : 'home').map(&:pid) 
   end 
+
+  def batters_faced
+    game.get_batters(home? ? 'away' : 'home').map(&:pid) 
+  end 
   
 end
 
@@ -106,7 +120,9 @@ class Rivalry
     batter_dates.shift
     @rivalry_performances = []
     pitcher_dates.each do |datecode|
-      @rivalry_performances << RivalryPerformance.new(@pitcher, @batter, datecode) if Performance.new(@pitcher, datecode).opponent_abbrev == @batter.team_abbrev
+      if datecode && (Performance.new(@pitcher, datecode).opponent_abbrev == @batter.team_abbrev)
+        @rivalry_performances << RivalryPerformance.new(@pitcher, @batter, datecode)
+      end
     end
   end
 

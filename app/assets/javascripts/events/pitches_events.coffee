@@ -1,5 +1,6 @@
 initPlayer = 405395 #Albert Pujols 
-initPitcher = 453286 #Max Scherzer
+#initPitcher = 453286 #Max Scherzer
+initPitcher = 434378 #Justin Verlander
 
 $ ->
   
@@ -12,12 +13,14 @@ $ ->
     if select2.sel.val() != ""
        calendar.setupDatesForRivalry(select.sel.val(), select2.sel.val())
     else 
-      select2.buildWithRivals(initPlayer, initPitcher)
-      self.updateCal()
+      select2.buildWithRivals(initPlayer, initPitcher).promise().then( ->
+        calendar.setupDatesForRivalry(select.sel.val(), select2.sel.val())
+      )
   )
 
   select2.onChange( (self) -> 
     calendar.setupDatesForRivalry(select.sel.val(), select2.sel.val())
+    select.buildWithRivals(select2.sel.val(), initPlayer)
   )  
   
   calendar.onChange( (self) -> 

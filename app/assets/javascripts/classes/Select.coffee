@@ -8,7 +8,8 @@ class window.Select
 
   buildWithRivals : (id, default_rival) ->
     self = @
-    $.get("/pitches/pitchers_faced.json?pid=#{id}").then(
+
+    $.get("/pitches/players_faced.json?pid=#{id}").then(
       (data) ->
         self.build(data.player_ids)
         self.changePlayer(default_rival)
