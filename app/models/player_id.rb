@@ -74,7 +74,11 @@ class Performance
   end
   
   def at_bats
-    player_at_bats = game.get_atbats.select{ |atbat| atbat.batter_id.to_i == @player_id.id }
+    if @player_id.pitcher?
+      player_at_bats = game.get_atbats.select{ |atbat| atbat.pitcher_id.to_i == @player_id.id }
+    else
+      player_at_bats = game.get_atbats.select{ |atbat| atbat.batter_id.to_i == @player_id.id }
+    end
     return player_at_bats
   end
 

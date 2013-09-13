@@ -76,8 +76,8 @@ class PitchesController < ApplicationController
     end
   end 
 
-  def pitchers_faced
-    player_ids = PlayerId.find(params[:pid]).pitchers_faced
+  def players_faced
+    player_ids = PlayerId.find(params[:pid]).players_faced
     @players = player_ids.collect { |player_id| PlayerId.find_by_id(player_id) }
     @players.compact!.sort! { |a, b| a.last <=> b.last }
 
