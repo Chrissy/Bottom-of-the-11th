@@ -35,7 +35,7 @@ class window.Select
     for player in players
       optionsString += "<option value=#{player.id}>#{player.last} #{player.first}</option>"
     @select_element.html(optionsString)  
-    @sel.prepend("<option></option>").trigger('liszt:updated')
+    @sel.prepend("<option value='0'>--------</option>").trigger('liszt:updated')
   
   changePlayer : (id) ->
     option = @select_element.children('option').filter("[value='#{id}']")[0]

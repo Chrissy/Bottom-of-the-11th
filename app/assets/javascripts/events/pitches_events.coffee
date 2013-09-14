@@ -1,6 +1,6 @@
-initPlayer = 405395 #Albert Pujols 
+initPlayer = 453286 #Albert Pujols 
 #initPitcher = 453286 #Max Scherzer
-initPitcher = 434378 #Justin Verlander
+initPitcher = 405395 #Justin Verlander
 
 $ ->
   
@@ -28,7 +28,7 @@ $ ->
   )
 
   select.buildWithAll(initPlayer).promise().then( ->
-    select2.buildWithRivals(initPlayer, initPitcher).promise().then( ->
-      calendar.setupDatesForRivalry(select.sel.val(), select2.sel.val())
+    select2.buildWithRivals(initPlayer, 0).promise().then( ->
+      calendar.setupForPlayer(initPlayer)
     )
   )
