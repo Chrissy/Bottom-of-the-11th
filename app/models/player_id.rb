@@ -19,7 +19,11 @@ class PlayerId < ActiveRecord::Base
   end
 
   def pitcher?
-    Team.new(team_abbrev).get_starters_unique(2012).map(&:pid).include?(id.to_s) || Team.new(team_abbrev).get_closers_unique(2012).map(&:pid).include?(id.to_s)
+    pitcher = Team.new(team_abbrev).get_starters_unique(2012).map(&:pid).include?(id.to_s) || Team.new(team_abbrev).get_closers_unique(2012).map(&:pid).include?(id.to_s)
+  end
+
+  def pitches?
+    self.pitches
   end
 
   def players_faced
@@ -115,9 +119,9 @@ end
 class Rivalry
   attr_reader :rivalry_performances, :pitcher, :batter
 
-  def initialize(player1_id, player2_id) 
-    @pitcher = player1_id
-    @batter = player2_id
+  def initialize(pitcher, batter) 
+    @pitcher = pitcher
+    @batter = batter
     pitcher_dates = @pitcher.date_codes_array
     batter_dates = @batter.date_codes_array
     pitcher_dates.shift

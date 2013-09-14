@@ -67,10 +67,11 @@ class PitchesController < ApplicationController
   end
 
   def dates_faced
-    @dates = PlayerId.find(params[:batter])
-                     .pitching_rivalry(params[:pitcher])
-                     .rivalry_performances.map(&:date_array)
-                     
+    pitcher = PlayerId.find(params[:pitcher])
+    batter = PlayerId.find(params[:batter])
+    
+    @dates = Rivalry.new(pitcher, batter).rivalry_performances.map(&:date_array)
+
     respond_to do |format|
       format.json { render :template => 'pitches/dates.json.jbuilder' }
     end
@@ -87,7 +88,7 @@ class PitchesController < ApplicationController
   end
 
   def all_players
-    @players = PlayerId.all
+    @players = PlayerId.find(:all, :conditions => ["pitches=?",true])
     respond_to do |format|
       format.json { render :template => 'pitches/players.json.jbuilder' }
     end

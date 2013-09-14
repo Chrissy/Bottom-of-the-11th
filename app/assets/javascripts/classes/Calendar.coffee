@@ -57,7 +57,7 @@ class window.Calendar
     for date in dates
       datesString += "&dates[]=#{date}"
     $.ajax(
-      url: "/pitches/get.json?bid=#{self.playerId}&pid=#{self.opponentId}#{datesString}"
+      url: "/pitches/get.json?bid=#{self.opponentId}&pid=#{self.playerId}#{datesString}"
     ).done((data) ->
       self.surface.draw(data)
     )

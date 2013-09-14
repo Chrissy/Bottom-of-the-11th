@@ -29,6 +29,15 @@ class DatabaseTools
     end
     return participation_date
   end
+
+  def self.save_pitcher_for_all_players
+    PlayerId.all.each do |player|
+      if player.pitches == nil
+        player.pitches = player.pitcher?
+        player.save
+      end
+    end
+  end
   
   def self.save_player_ids_for_year(year)
     puts "saving unique players..."
