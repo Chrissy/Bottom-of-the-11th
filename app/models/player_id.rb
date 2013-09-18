@@ -119,9 +119,10 @@ end
 class Rivalry
   attr_reader :rivalry_performances, :pitcher, :batter
 
-  def initialize(pitcher, batter) 
-    @pitcher = pitcher
-    @batter = batter
+  def initialize(player1, player2)
+    @pitcher = player1.pitches ? player1 : player2
+    @batter = player1.pitches ? player2 : player1
+
     pitcher_dates = @pitcher.date_codes_array
     batter_dates = @batter.date_codes_array
     pitcher_dates.shift
@@ -129,7 +130,7 @@ class Rivalry
     @rivalry_performances = []
     pitcher_dates.each do |datecode|
       if datecode && (Performance.new(@pitcher, datecode).opponent_abbrev == @batter.team_abbrev)
-        @rivalry_performances << RivalryPerformance.new(@pitcher, @batter, datecode)
+        @rivalry_performances << RivalryPerformance.new(@pitcher.id, @batter.id, datecode)
       end
     end
   end

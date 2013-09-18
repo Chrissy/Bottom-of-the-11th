@@ -85,8 +85,8 @@ class window.Calendar
       -> return "could not find dates"
     )
 
-  getDatesForRivalry : (batter, pitcher) ->
-    $.get("/pitches/dates_faced.json?batter=#{batter}&pitcher=#{pitcher}").then(
+  getDatesForRivalry : (player1, player2) ->
+    $.get("/pitches/dates_faced.json?player1=#{player1}&player2=#{player2}").then(
       (dates) -> return dates
     )
     

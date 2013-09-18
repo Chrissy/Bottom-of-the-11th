@@ -1,20 +1,19 @@
 class window.Select
 
   constructor : (parent, calendar) ->
-    @select_element = $('<select data-placeholder="-----"/>')
+    @select_element = $('<select class="player-select" data-placeholder="-----"/>')
     $(parent).append(@select_element)
     @sel = @select_element.chosen()
     @cal = calendar
+    @select_element.data("select", @)
+    @.initChangeEvent()
 
   buildWithRivals : (id, default_rival) ->
     self = @
-
     $.get("/pitches/players_faced.json?pid=#{id}").then(
       (data) ->
         self.build(data.player_ids)
         self.changePlayer(default_rival)
-      -> 
-        console.log "could not find players"
     )
 
   updateCalWithCrossReferents : ->
@@ -42,9 +41,20 @@ class window.Select
     @sel[0].selectedIndex = option.index
     @sel.trigger('liszt:updated')
     
-  onChange : (func) ->
+  initChangeEvent : ->
     self = @
-    @sel.change( -> func(self))
+    @sel.change( (self) ->
+      select = $(self.target).data("select")
+      opponentSelect = $('.player-select').not(self.target).data("select")
+      opponentId = opponentSelect.sel.val()
+
+      opponentSelect.buildWithRivals(select.currentId(), opponentId).promise().then( ->
+        if opponentId == "0"
+          select.cal.setupDatesForPlayer(select.currentId())
+        else 
+          select.cal.setupDatesForRivalry(select.currentId(), opponentSelect.currentId())
+      )
+    )
     
   currentId : ->
     return @sel.val()

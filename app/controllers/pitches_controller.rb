@@ -36,7 +36,7 @@ class PitchesController < ApplicationController
 
     params[:dates].each do |date|
       if params[:bid]
-        pitches = RivalryPerformance.new(params[:pid], params[:bid], date).pitches
+        pitches = RivalryPerformance.new(params[:bid], params[:pid], date).pitches
         @pitches_with_pitchers.concat(pitches)
       else
         @pitches_with_pitchers.concat(player.performance(date).pitches)
@@ -67,10 +67,10 @@ class PitchesController < ApplicationController
   end
 
   def dates_faced
-    pitcher = PlayerId.find(params[:pitcher])
-    batter = PlayerId.find(params[:batter])
-    
-    @dates = Rivalry.new(pitcher, batter).rivalry_performances.map(&:date_array)
+    player1 = PlayerId.find(params[:player1])
+    player2 = PlayerId.find(params[:player2])
+
+    @dates = Rivalry.new(player1, player2).rivalry_performances.map(&:date_array)
 
     respond_to do |format|
       format.json { render :template => 'pitches/dates.json.jbuilder' }

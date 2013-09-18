@@ -9,20 +9,6 @@ $ ->
   select = new Select "nav", calendar
   select2 = new Select "nav", calendar
   
-  select.onChange( (self) -> 
-    if select2.sel.val() != ""
-       calendar.setupDatesForRivalry(select.sel.val(), select2.sel.val())
-    else 
-      select2.buildWithRivals(initPlayer, initPitcher).promise().then( ->
-        calendar.setupDatesForRivalry(select.sel.val(), select2.sel.val())
-      )
-  )
-
-  select2.onChange( (self) -> 
-    calendar.setupDatesForRivalry(select.sel.val(), select2.sel.val())
-    select.buildWithRivals(select2.sel.val(), initPlayer)
-  )  
-  
   calendar.onChange( (self) -> 
     calendar.draw()
   )
