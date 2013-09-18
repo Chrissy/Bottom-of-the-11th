@@ -11,7 +11,6 @@ class window.Calendar
   setupForPlayer : (playerId) ->
     self = @
     @setupDatesForPlayer(playerId).promise().then((dates)  ->
-      console.log(dates)
       self.selectLast(dates)
       self.draw(@surface)
     )
