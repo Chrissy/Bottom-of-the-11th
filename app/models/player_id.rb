@@ -1,17 +1,18 @@
 class PlayerId < ActiveRecord::Base
   attr_accessible :first, :id, :last, :team_abbrev, :days_played
+  serialize :teams, Array
+  serialize :days_played, Array
   
   def performances
     performances = []
-    date_codes_array = eval(self.days_played)
-    date_codes_array.each do |code|
+    self.days_played.each do |code|
       performances << Performance.new(self, code) if code
     end
     return performances 
   end
 
   def date_codes_array
-    eval(self.days_played)
+    self.days_played
   end
   
   def performance(date_code)
@@ -20,6 +21,10 @@ class PlayerId < ActiveRecord::Base
 
   def pitcher?
     pitcher = Team.new(team_abbrev).get_starters_unique(2012).map(&:pid).include?(id.to_s) || Team.new(team_abbrev).get_closers_unique(2012).map(&:pid).include?(id.to_s)
+  end
+
+  def team(year)
+    self.teams.find { |team| team[1] == year }.first
   end
 
   def pitches?
@@ -56,6 +61,7 @@ class Performance
   def initialize(player_id, date_code)    
     @date_array = Performance.key_to_date_array(date_code)
     @player_id = player_id
+    @player_team = @player_id.team(@date_array[0])
   end
   
   def self.key_to_date_array(key)
@@ -72,7 +78,7 @@ class Performance
 
   # always returns first game (even if there is a double header)
   def game
-    team = Team.new(@player_id.team_abbrev)
+    team = Team.new(@player_team)
     game = team.games_for_date(@date_array[0], @date_array[1], @date_array[2])
     return game[0]
   end
@@ -95,11 +101,11 @@ class Performance
   end
 
   def side
-    (game.home_team_abbrev == @player_id.team_abbrev) ? 'home' : 'away'
+    (game.home_team_abbrev == @player_team) ? 'home' : 'away'
   end
 
   def home?
-    return true if game.home_team_abbrev == @player_id.team_abbrev 
+    return true if game.home_team_abbrev == @player_team 
   end
 
   def opponent_abbrev
@@ -129,7 +135,7 @@ class Rivalry
     batter_dates.shift
     @rivalry_performances = []
     pitcher_dates.each do |datecode|
-      if datecode && (Performance.new(@pitcher, datecode).opponent_abbrev == @batter.team_abbrev)
+      if datecode && (Performance.new(@pitcher, datecode).opponent_abbrev == @batter.team(Performance.key_to_date_array(datecode)[0]))
         @rivalry_performances << RivalryPerformance.new(@pitcher.id, @batter.id, datecode)
       end
     end
