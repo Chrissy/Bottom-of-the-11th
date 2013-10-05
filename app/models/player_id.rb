@@ -2,6 +2,7 @@ class PlayerId < ActiveRecord::Base
   attr_accessible :first, :id, :last, :team_abbrev, :days_played
   serialize :teams, Array
   serialize :days_played, Array
+  serialize :allstar_appearances, Array
   
   def performances
     performances = []

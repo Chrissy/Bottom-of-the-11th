@@ -143,5 +143,21 @@ class DatabaseTools
     end
     players
   end
+
+  def self.add_allstar_appearances_to_player_ids(year)
+    Game.find_by_month(year,7).find { |game| game.game_type == "A"}.get_rosters.each do |roster|
+      roster.players.each do |player|
+        if PlayerId.exists?(player.pid)
+          pid = PlayerId.find(player.pid)
+          if pid.allstar_appearances
+            pid.allstar_appearances.push(year)
+          else
+            pid.allstar_appearances = [year]
+          end
+          pid.save
+        end
+      end
+    end
+  end
     
 end
