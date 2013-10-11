@@ -78,9 +78,11 @@ class PitchesController < ApplicationController
   end 
 
   def players_faced
-    player_ids = PlayerId.find(params[:pid]).players_faced
+    player = PlayerId.find(params[:pid])
+    player_ids = player.players_faced
     @players = player_ids.collect { |player_id| PlayerId.find_by_id(player_id) }
     @players.compact!.sort! { |a, b| a.last <=> b.last }
+    @allstars = player.pitches? ? PlayerId.allstar_batters(10) : PlayerId.allstar_pitchers(10)
 
     respond_to do |format|
       format.json { render :template => 'pitches/players.json.jbuilder' }
@@ -89,6 +91,7 @@ class PitchesController < ApplicationController
 
   def all_players
     @players = PlayerId.find(:all, :conditions => ["pitches=?",true])
+    @allstars = PlayerId.allstar_pitchers(10)
     respond_to do |format|
       format.json { render :template => 'pitches/players.json.jbuilder' }
     end

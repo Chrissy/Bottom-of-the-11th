@@ -8,11 +8,12 @@ class window.Select
     @select_element.data("select", @)
     @.initChangeEvent()
 
-  buildWithRivals : (id, default_rival) ->
+  buildWithRivals : (default_rival) ->
     self = @
+    id = $('.player-select').not(self.select_element).data("select").sel.val()
     $.get("/pitches/players_faced.json?pid=#{id}").then(
       (data) ->
-        self.build(data.player_ids)
+        self.build(data.player_ids, data.allstars)
         self.changePlayer(default_rival)
     )
 
@@ -23,21 +24,27 @@ class window.Select
     self = @
     $.get("/pitches/all_players.json").then(
       (data) ->
-        self.build(data.player_ids)
+        selectedPlayer = data.allstars[0].id if selectedPlayer == "first"
+        self.build(data.player_ids, data.allstars)
         self.changePlayer(selectedPlayer)
       -> 
         console.log "could not find players"
     )
 
-  build : (players) ->
+  build : (players, allstars) ->
     optionsString = ''
+    allstarString = '' 
+    playerString = ''
     for player in players
-      optionsString += "<option value=#{player.id}>#{player.last} #{player.first}</option>"
+      playerString += "<option value=#{player.id}>#{player.last} #{player.first}</option>"
+    for allstar in allstars
+      allstarString += "<option value=#{allstar.id}>#{allstar.last} #{allstar.first}</option>"
+    optionsString = "<optgroup label='allstars'>#{allstarString}</optgroup><optgroup label='players'>#{playerString}</optgroup>"
     @select_element.html(optionsString)  
     @sel.prepend("<option value='0'>--------</option>").trigger('liszt:updated')
   
   changePlayer : (id) ->
-    option = @select_element.children('option').filter("[value='#{id}']")[0]
+    option = @select_element.find('option').filter("[value='#{id}']")[0]
     @sel[0].selectedIndex = option.index
     @sel.trigger('liszt:updated')
     
@@ -47,11 +54,10 @@ class window.Select
       select = $(self.target).data("select")
       opponentSelect = $('.player-select').not(self.target).data("select")
       opponentId = opponentSelect.sel.val()
-
-      opponentSelect.buildWithRivals(select.currentId(), opponentId).promise().then( ->
+      opponentSelect.buildWithRivals(opponentId).promise().then( ->
         if opponentId == "0"
-          select.cal.setupForPlayer(select.currentId())
-        else 
+          select.cal.setupForSelect(select)
+        else
           select.cal.setupDatesForRivalry(select.currentId(), opponentSelect.currentId())
       )
     )
@@ -60,4 +66,4 @@ class window.Select
     return @sel.val()
     
   updateCal : ->
-    @cal.setupForPlayer(@currentId())
+    @cal.setupForSelect(@sel)

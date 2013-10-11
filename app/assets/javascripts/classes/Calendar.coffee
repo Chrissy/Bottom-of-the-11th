@@ -8,9 +8,9 @@ class window.Calendar
       mode: 'multiple'
     )
     
-  setupForPlayer : (playerId) ->
+  setupForSelect : (select) ->
     self = @
-    @setupDatesForPlayer(playerId).promise().then((dates)  ->
+    @setupDatesForPlayer(select.val()).promise().then((dates)  ->
       self.selectLast(dates)
       self.draw(@surface)
     )

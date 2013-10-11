@@ -54,6 +54,22 @@ class PlayerId < ActiveRecord::Base
     Rivalry.new(PlayerId.find(pid), self)
   end
 
+  def self.find_allstars(players, limit)
+    players.sort { |p1, p2| p2.allstar_appearances.count <=> p1.allstar_appearances.count }[0..50].shuffle[0..limit]
+  end
+
+  def self.allstars(limit)
+    find_allstars(PlayerId.all, limit)
+  end
+
+  def self.allstar_batters(limit)
+    find_allstars(PlayerId.find(:all, :conditions => ["pitches=?",false]), limit)
+  end
+
+  def self.allstar_pitchers(limit)
+    find_allstars(PlayerId.find(:all, :conditions => ["pitches=?",true]), limit)
+  end
+
 end
 
 class Performance
