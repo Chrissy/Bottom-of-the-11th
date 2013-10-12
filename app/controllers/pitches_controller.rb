@@ -80,9 +80,24 @@ class PitchesController < ApplicationController
   def players_faced
     player = PlayerId.find(params[:pid])
     player_ids = player.players_faced
-    @players = player_ids.collect { |player_id| PlayerId.find_by_id(player_id) }
-    @players.compact!.sort! { |a, b| a.last <=> b.last }
-    @allstars = player.pitches? ? PlayerId.allstar_batters(10) : PlayerId.allstar_pitchers(10)
+    players = player_ids.collect { |player_id| PlayerId.find_by_id(player_id) }
+    players.compact!.sort! { |a, b| a.last <=> b.last }
+    @players = players.delete_if {|x| x.teams.last == player.teams.last }
+
+    @allstars = PlayerId.find_allstars(@players, 30)
+    @allstars.sort! { |a, b| (a.divisions.last == b.divisions.last) ? 1 : -1 }
+
+    division_allstars = []
+    league_allstars = []
+    @allstars.each do |allstar|
+      if allstar.divisions.last == player.divisions.last
+        division_allstars << allstar 
+      elsif allstar.divisions.last.try(:[], 1) == player.divisions.last.try(:[], 1) && player.divisions.last.try(:[], 1)
+        league_allstars << allstar
+      end
+    end
+
+    @allstars = division_allstars.take(5) + league_allstars.take(5)
 
     respond_to do |format|
       format.json { render :template => 'pitches/players.json.jbuilder' }

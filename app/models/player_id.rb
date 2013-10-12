@@ -32,6 +32,19 @@ class PlayerId < ActiveRecord::Base
     self.pitches
   end
 
+  def divisions
+    divs = YAML.load_file('components/divisions.yml')
+    divisions = []
+    teams.each do |team|
+      divisions << divs[team[0]]
+    end
+    divisions
+  end
+
+  def favorite_division
+    divisions.max_by(&:size)
+  end
+
   def players_faced
     player_ids = []
     pitcher = pitcher?
