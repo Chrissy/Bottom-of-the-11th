@@ -56,7 +56,7 @@ class window.Select
       opponentId = opponentSelect.sel.val()
       opponentSelect.buildWithRivals(opponentId).promise().then( ->
         if opponentId == "0"
-          select.cal.setupForSelect(select)
+          select.cal.setupForSelect(select.sel)
         else
           select.cal.setupDatesForRivalry(select.currentId(), opponentSelect.currentId())
       )

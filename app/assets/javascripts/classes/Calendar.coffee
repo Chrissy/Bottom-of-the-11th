@@ -11,7 +11,7 @@ class window.Calendar
   setupForSelect : (select) ->
     self = @
     @setupDatesForPlayer(select.val()).promise().then((dates)  ->
-      self.selectLast(dates)
+      self.selectLast(dates, 2)
       self.draw(@surface)
     )
 
@@ -29,7 +29,7 @@ class window.Calendar
     @opponentId = opponentId
     @getDatesForRivalry(playerId, opponentId).promise().then((dates) ->
       self.setupDates(dates)
-      self.selectLast(dates)
+      self.selectLast(dates, 10)
       self.drawForRivalry()
     )
 
@@ -40,9 +40,9 @@ class window.Calendar
       self.returnOppositeDate(dateToCheck, dates)
     cal.draw()
 
-  selectLast : (dates) ->
+  selectLast : (dates, numberOfDates) ->
     moments = []
-    last_dates = dates.dates.reverse().slice(0, @autoSelectNumber)
+    last_dates = dates.dates.reverse().slice(0, numberOfDates)
     for date in last_dates
       moments.push(Kalendae.moment("#{date[0]},#{date[1]},#{date[2]}", "YYYYMD"))
     @cal.setSelected(moments)
