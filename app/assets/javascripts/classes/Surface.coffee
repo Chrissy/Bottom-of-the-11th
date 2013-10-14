@@ -55,6 +55,7 @@ class window.Surface
       )
 
   drawLines : (data) ->
+    hits = []
     for pitch in data.pitches
       x1 = 0
       y1 = 400 - parseFloat(pitch.z0)*50
@@ -65,6 +66,17 @@ class window.Surface
       p = @lineGraph.path("M #{x1} #{y1} q #{cx} #{cy} #{x2} #{y2}")
       p.attr("stroke", @pitchTypeHash[pitch.pitch_type])
       @pushData(p,pitch)
+      hits.push(p) if pitch.des == "In play, run(s)" || pitch.des == "In play, no out"
+    for hit in hits
+      hit.toFront()
+      pt = hit.getPointAtLength(hit.getTotalLength());   
+      c = @lineGraph.circle(pt.x, pt.y, 3)
+      c.attr("fill", hit.attr("stroke"))
+      c.attr("stroke", "transparent").toFront()
+      c2 = @lineGraph.circle(pt.x, pt.y, 6)
+      c2.attr("fill", "transparent")
+      c2.attr("stroke", hit.attr("stroke")).toFront()
+
       
       self = @
       
