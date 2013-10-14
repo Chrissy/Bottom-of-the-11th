@@ -6,15 +6,14 @@ class window.Select
     @sel = @select_element.chosen()
     @cal = calendar
     @select_element.data("select", @)
-    @.initChangeEvent()
 
-  buildWithRivals : (default_rival) ->
+  buildWithRivals : ->
     self = @
-    id = $('.player-select').not(self.select_element).data("select").sel.val()
-    $.get("/pitches/players_faced.json?pid=#{id}").then(
+    stored_id = if @currentId() then @currentId() else 0
+    $.get("/pitches/players_faced.json?pid=#{self.opponentId()}").then(
       (data) ->
         self.build(data.player_ids, data.allstars)
-        self.changePlayer(default_rival)
+        self.changePlayer(stored_id)
     )
 
   updateCalWithCrossReferents : ->
@@ -48,18 +47,10 @@ class window.Select
     @sel[0].selectedIndex = option.index
     @sel.trigger('liszt:updated')
     
-  initChangeEvent : ->
+  onChange : (func) ->
     self = @
-    @sel.change( (self) ->
-      select = $(self.target).data("select")
-      opponentSelect = $('.player-select').not(self.target).data("select")
-      opponentId = opponentSelect.sel.val()
-      opponentSelect.buildWithRivals(opponentId).promise().then( ->
-        if opponentId == "0"
-          select.cal.setupForSelect(select.sel)
-        else
-          select.cal.setupDatesForRivalry(select.currentId(), opponentSelect.currentId())
-      )
+    @sel.change( (target) ->
+      func(self)
     )
     
   currentId : ->
@@ -67,3 +58,9 @@ class window.Select
     
   updateCal : ->
     @cal.setupForSelect(@sel)
+
+  opponentSelect : ->
+    return $('.player-select').not(@.select_element).data("select")
+
+  opponentId : ->
+    return @opponentSelect().sel.val()

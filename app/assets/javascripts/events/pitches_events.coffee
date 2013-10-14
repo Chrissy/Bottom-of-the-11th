@@ -14,3 +14,15 @@ $ ->
       calendar.setupForSelect(select.sel)
     )
   )
+
+  select.onChange( (self) ->
+    self.opponentSelect().buildWithRivals()
+    if self.opponentId() == "0"
+      self.cal.setupForSelect(select.sel)
+    else
+      self.cal.setupDatesForRivalry(self.opponentId(), self.currentId())
+  )
+
+  select2.onChange( (self) ->
+    self.cal.setupDatesForRivalry(self.currentId(), self.opponentId())
+  )
