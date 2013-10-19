@@ -125,7 +125,9 @@ class Performance
   def pitches
     all_pitches = []
     self.at_bats.each do |at_bat|
-      all_pitches.concat(at_bat.pitches)
+      atbat_pitches = at_bat.pitches
+      atbat_pitches.last.ab_num = "last"
+      all_pitches.concat(atbat_pitches)
     end
     return all_pitches
   end

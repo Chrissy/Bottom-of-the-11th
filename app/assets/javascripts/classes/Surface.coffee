@@ -6,7 +6,7 @@ class window.Surface
     @circleGraphContainer = $("#surface")
     @circleGraph = Raphael("surface", 600, 500)
     @lineGraphContainer = $("#surface2")
-    @lineGraph = Raphael("surface2", 800, 300)
+    @lineGraph = Raphael("surface2", 800, 600)
 
     width = $("#container").innerWidth()
     height = $("#container").innerHeight()
@@ -26,6 +26,7 @@ class window.Surface
     
   drawCircles : (data) ->
     for pitch in data.pitches
+      return if pitch.pitch_type == "IN"
       c = @circleGraph.circle(pitch.x*3, pitch.y*3 - 200, @radius(pitch.start_speed))
       c.attr("fill", @pitchTypeHash[pitch.pitch_type])
       c.attr("opacity", "0.6")
@@ -56,7 +57,9 @@ class window.Surface
 
   drawLines : (data) ->
     hits = []
+    strikes = []
     for pitch in data.pitches
+      return if pitch.pitch_type == "IN"
       x1 = 0
       y1 = 400 - parseFloat(pitch.z0)*50
       x2 = 800
@@ -65,18 +68,11 @@ class window.Surface
       cy = (parseFloat(pitch.pfx_z)/12)*50
       p = @lineGraph.path("M #{x1} #{y1} q #{cx} #{cy} #{x2} #{y2}")
       p.attr("stroke", @pitchTypeHash[pitch.pitch_type])
+      p.attr("opacity", 0.7)
+      p.attr("stroke-width", 0.75)
       @pushData(p,pitch)
       hits.push(p) if pitch.des == "In play, run(s)" || pitch.des == "In play, no out"
-    for hit in hits
-      hit.toFront()
-      pt = hit.getPointAtLength(hit.getTotalLength());   
-      c = @lineGraph.circle(pt.x, pt.y, 3)
-      c.attr("fill", hit.attr("stroke"))
-      c.attr("stroke", "transparent").toFront()
-      c2 = @lineGraph.circle(pt.x, pt.y, 6)
-      c2.attr("fill", "transparent")
-      c2.attr("stroke", hit.attr("stroke")).toFront()
-
+      strikes.push(p) if pitch.ab_num == "last" && (pitch.des == "Swinging Strike" || pitch.des == "Called Strike")
       
       self = @
       
@@ -99,17 +95,52 @@ class window.Surface
           twin.attr("stroke", self.pitchTypeHash[twin.data("pitchAbbr")])
       )
 
-  pitchTypeHash : 
-    FS : "blue"
-    SL : "purple"
-    FF : "red"
-    SI : "orange"
-    CH : "green"
-    FA : "red"
-    CU : "yellow"
-    FC : "gray"
-    KN : "pink"
-    KC : "pink"
+      for hit in hits
+        color = @hitTypeHash[hit.data("pitchAbbr")]
+        hit.toFront()
+        hit.attr("stroke", color)
+        hit.attr("opacity", 1)
+        hit.attr("stroke-width", 2)
+
+        pt = hit.getPointAtLength(hit.getTotalLength());   
+        c = @lineGraph.circle(pt.x, pt.y, 3)
+        c.attr("fill", color)
+        c.attr("stroke", "transparent").toFront()
+        c2 = @lineGraph.circle(pt.x, pt.y, 6)
+        c2.attr("fill", "transparent")
+        c2.attr("stroke", color)
+
+      for strike in strikes
+        color = @hitTypeHash[strike.data("pitchAbbr")]
+        strike.toFront()
+        strike.attr("stroke", color)
+        strike.attr("opacity", 1)
+        strike.attr("stroke-width", 1)
+        strike.attr("stroke-dasharray", "-.")
+
+  pitchTypeHash :
+    FF : "rgb(126, 23, 34)" #fastball/red
+    FA : "rgb(149, 64, 17)" #fastball/red
+    FC : "rgb(161, 134, 27)" #cutter/yellow
+    SI : "rgb(162, 73, 83)" #sinker/pink
+    SL : "rgb(115, 12, 69)" #slider/magenta
+    FS : "rgb(77, 46, 90)" #splitter/purple
+    CU : "rgb(25, 57, 106)" #curve/blue
+    CH : "rgb(10, 97, 115)" #change/turqoise
+    KN : "rgb(13, 86, 74)" #knuckle/green
+    KC : "rgb(13, 86, 74)" #knuckle-curve/green
+
+  hitTypeHash :
+    FF : "rgb(201, 54, 49)" #fastball/red
+    FA : "rgb(201, 54, 49)" #fastball/red
+    FC : "rgb(232, 207, 84)" #cutter/yellow
+    SI : "rgb(229, 122, 130)" #sinker/pink
+    SL : "rgb(202, 53, 121)" #slider/magenta
+    FS : "rgb(155, 78, 187)" #splitter/purple
+    CU : "rgb(40, 108, 177)" #curve/blue
+    CH : "rgb(105, 173, 187)" #change/turqoise
+    KN : "rgb(76, 164, 135)" #knuckle/green
+    KC : "rgb(76, 164, 135)" #knuckle-curve/green
   
   pushData : (el,pitch) ->
     el.data("pitchName", pitch.pitchName)
