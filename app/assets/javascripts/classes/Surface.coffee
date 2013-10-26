@@ -68,32 +68,12 @@ class window.Surface
       cy = (parseFloat(pitch.pfx_z)/12)*50
       p = @lineGraph.path("M #{x1} #{y1} q #{cx} #{cy} #{x2} #{y2}")
       p.attr("stroke", @pitchTypeHash[pitch.pitch_type])
-      p.attr("opacity", 0.7)
       p.attr("stroke-width", 0.75)
       @pushData(p,pitch)
       hits.push(p) if pitch.des == "In play, run(s)" || pitch.des == "In play, no out"
       strikes.push(p) if pitch.ab_num == "last" && (pitch.des == "Swinging Strike" || pitch.des == "Called Strike")
       
       self = @
-      
-      p.hover(
-        ->
-          this.animate({"stroke-width" : 4},50)
-          this.attr("stroke", "#fff")
-          p.data("tooltip", self.addTooltip(self.lineGraphContainer,this))
-          twin = self.findTwin(self.circleGraph, this)
-          twin.attr("stroke-width",3)
-          twin.attr("stroke", "#fff")
-          twin.toFront()
-          this.toFront()
-        -> 
-          this.animate({"stroke-width" : 1},50)
-          self.removeTooltip(this)
-          twin = self.findTwin(self.circleGraph, this)
-          twin.attr("stroke-width",1)
-          this.attr("stroke", self.pitchTypeHash[this.data("pitchAbbr")])
-          twin.attr("stroke", self.pitchTypeHash[twin.data("pitchAbbr")])
-      )
 
       for hit in hits
         color = @hitTypeHash[hit.data("pitchAbbr")]
@@ -109,6 +89,7 @@ class window.Surface
         c2 = @lineGraph.circle(pt.x, pt.y, 6)
         c2.attr("fill", "transparent")
         c2.attr("stroke", color)
+        hit.data("hit", true)
 
       for strike in strikes
         color = @hitTypeHash[strike.data("pitchAbbr")]
@@ -117,10 +98,35 @@ class window.Surface
         strike.attr("opacity", 1)
         strike.attr("stroke-width", 1)
         strike.attr("stroke-dasharray", "-.")
+        strike.data("strike", true)
+
+      p.hover(
+        ->
+          this.attr("stroke-width", 2)
+          this.attr("stroke", "#fff")
+          p.data("tooltip", self.addTooltip(self.lineGraphContainer,this))
+          twin = self.findTwin(self.circleGraph, this)
+          twin.attr("stroke-width",3)
+          twin.attr("stroke", "#fff")
+          twin.toFront()
+          this.toFront()
+        -> 
+          self.removeTooltip(this)
+          if this.data("hit") || this.data("strike")
+            this.attr("stroke",  then self.hitTypeHash[this.data("pitchAbbr")])
+            this.attr("stroke-width", if this.data("hit") then 2 else 1)
+          else
+            this.attr("stroke-width", 1)
+            this.attr("stroke",  then self.pitchTypeHash[this.data("pitchAbbr")])
+          twin = self.findTwin(self.circleGraph, this)
+          twin.attr("stroke", self.pitchTypeHash[twin.data("pitchAbbr")])
+          twin.attr("stroke-width", 1)
+      )
 
   pitchTypeHash :
     FF : "rgb(126, 23, 34)" #fastball/red
     FA : "rgb(149, 64, 17)" #fastball/red
+    FT : "rgb(149, 64, 17)" #fastball/red
     FC : "rgb(161, 134, 27)" #cutter/yellow
     SI : "rgb(162, 73, 83)" #sinker/pink
     SL : "rgb(115, 12, 69)" #slider/magenta
@@ -133,6 +139,7 @@ class window.Surface
   hitTypeHash :
     FF : "rgb(201, 54, 49)" #fastball/red
     FA : "rgb(201, 54, 49)" #fastball/red
+    FT : "rgb(201, 54, 49)" #fastball/red
     FC : "rgb(232, 207, 84)" #cutter/yellow
     SI : "rgb(229, 122, 130)" #sinker/pink
     SL : "rgb(202, 53, 121)" #slider/magenta
