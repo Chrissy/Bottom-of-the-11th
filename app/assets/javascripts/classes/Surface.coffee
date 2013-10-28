@@ -58,6 +58,7 @@ class window.Surface
   drawLines : (data) ->
     hits = []
     strikes = []
+    pitches = []
     for pitch in data.pitches
       return if pitch.pitch_type == "IN"
       x1 = 0
@@ -70,35 +71,13 @@ class window.Surface
       p.attr("stroke", @pitchTypeHash[pitch.pitch_type])
       p.attr("stroke-width", 0.75)
       @pushData(p,pitch)
-      hits.push(p) if pitch.des == "In play, run(s)" || pitch.des == "In play, no out"
-      strikes.push(p) if pitch.ab_num == "last" && (pitch.des == "Swinging Strike" || pitch.des == "Called Strike")
+      if pitch.des == "In play, run(s)" || pitch.des == "In play, no out"
+        hits.push(p) 
+      else if pitch.ab_num == "last" && (pitch.des == "Swinging Strike" || pitch.des == "Called Strike")
+        strikes.push(p)
       
+      pitches.push(p)
       self = @
-
-      for hit in hits
-        color = @hitTypeHash[hit.data("pitchAbbr")]
-        hit.toFront()
-        hit.attr("stroke", color)
-        hit.attr("opacity", 1)
-        hit.attr("stroke-width", 2)
-
-        pt = hit.getPointAtLength(hit.getTotalLength());   
-        c = @lineGraph.circle(pt.x, pt.y, 3)
-        c.attr("fill", color)
-        c.attr("stroke", "transparent").toFront()
-        c2 = @lineGraph.circle(pt.x, pt.y, 6)
-        c2.attr("fill", "transparent")
-        c2.attr("stroke", color)
-        hit.data("hit", true)
-
-      for strike in strikes
-        color = @hitTypeHash[strike.data("pitchAbbr")]
-        strike.toFront()
-        strike.attr("stroke", color)
-        strike.attr("opacity", 1)
-        strike.attr("stroke-width", 1)
-        strike.attr("stroke-dasharray", "-.")
-        strike.data("strike", true)
 
       p.hover(
         ->
@@ -122,6 +101,34 @@ class window.Surface
           twin.attr("stroke", self.pitchTypeHash[twin.data("pitchAbbr")])
           twin.attr("stroke-width", 1)
       )
+
+    for hit in hits
+      color = @hitTypeHash[hit.data("pitchAbbr")]
+      hit.toFront()
+      hit.attr("stroke", color)
+      hit.attr("opacity", 1)
+      hit.attr("stroke-width", 2)
+
+      pt = hit.getPointAtLength(hit.getTotalLength());   
+      c = @lineGraph.circle(pt.x, pt.y, 3)
+      c.attr("fill", color)
+      c.attr("stroke", "transparent").toFront()
+      c2 = @lineGraph.circle(pt.x, pt.y, 6)
+      c2.attr("fill", "transparent")
+      c2.attr("stroke", color)
+      hit.data("hit", true)
+
+    for strike in strikes
+      color = @hitTypeHash[strike.data("pitchAbbr")]
+      strike.toFront()
+      strike.attr("stroke", color)
+      strike.attr("opacity", 1)
+      strike.attr("stroke-width", 1)
+      strike.attr("stroke-dasharray", "-.")
+      strike.data("strike", true)
+
+    for pitch in pitches
+      self.animatePath(pitch.node, pitch.data("pitchSpeed"))
 
   pitchTypeHash :
     FF : "rgb(126, 23, 34)" #fastball/red
@@ -197,4 +204,12 @@ class window.Surface
 
   radius : (speed) ->
     return Math.pow(speed/60, 4)
+
+  animatePath : (path, speed) ->
+    length = path.getTotalLength()
+    path.style.strokeDasharray = length + ' ' + length
+    path.style.strokeDashoffset = length
+    path.getBoundingClientRect()
+    path.style.transition = path.style.WebkitTransition = "stroke-dashoffset #{@.radius(speed)/3}s ease-out"
+    path.style.strokeDashoffset = '0'
 

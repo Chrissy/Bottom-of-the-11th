@@ -15,6 +15,10 @@ svg {
   margin: 20px auto;
 }
 
+svg path {
+  -webkit-transform: translate3d(0, 0, 0)
+}
+
 .surface {
   position: relative;
   width: 600px;
