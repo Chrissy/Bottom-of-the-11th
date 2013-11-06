@@ -103,6 +103,7 @@ class window.Surface
       )
 
     for hit in hits
+      self = @
       color = @hitTypeHash[hit.data("pitchAbbr")]
       hit.toFront()
       hit.attr("stroke", color)
@@ -110,25 +111,27 @@ class window.Surface
       hit.attr("stroke-width", 2)
 
       pt = hit.getPointAtLength(hit.getTotalLength());   
-      c = @lineGraph.circle(pt.x, pt.y, 3)
+      c = @lineGraph.circle(pt.x, pt.y, 0)
       c.attr("fill", color)
       c.attr("stroke", "transparent").toFront()
-      c2 = @lineGraph.circle(pt.x, pt.y, 6)
+      c2 = @lineGraph.circle(pt.x, pt.y, 0)
       c2.attr("fill", "transparent")
       c2.attr("stroke", color)
       hit.data("hit", true)
+
+      window.setTimeout( -> 
+        self.animateCircle(c, c2)
+      , self.radius(hit.data("pitchSpeed"))/3 * 1000 + 200)
 
     for strike in strikes
       color = @hitTypeHash[strike.data("pitchAbbr")]
       strike.toFront()
       strike.attr("stroke", color)
-      strike.attr("opacity", 1)
       strike.attr("stroke-width", 1)
-      strike.attr("stroke-dasharray", "-.")
       strike.data("strike", true)
 
     for pitch in pitches
-      self.animatePath(pitch.node, pitch.data("pitchSpeed"))
+      self.animatePath(pitch)
 
   pitchTypeHash :
     FF : "rgb(126, 23, 34)" #fastball/red
@@ -205,11 +208,24 @@ class window.Surface
   radius : (speed) ->
     return Math.pow(speed/60, 4)
 
-  animatePath : (path, speed) ->
+  animatePath : (pitch) ->
+    strike = !!pitch.data("strike")
+    path = pitch.node
+    dashString = ""
     length = path.getTotalLength()
-    path.style.strokeDasharray = length + ' ' + length
-    path.style.strokeDashoffset = length
+    path.style.strokeDasharray =  if strike then "1 #{length} #{@.dashArray(length)}" else "#{length} #{length}"
+    path.style.strokeDashoffset = if strike then '0' else length
     path.getBoundingClientRect()
-    path.style.transition = path.style.WebkitTransition = "stroke-dashoffset #{@.radius(speed)/3}s ease-out"
-    path.style.strokeDashoffset = '0'
+    path.style.transition = path.style.WebkitTransition = "stroke-dashoffset #{@.radius(pitch.data("pitchSpeed"))/2}s ease-out"
+    path.style.strokeDashoffset = if strike then (length * -1) else 0
+
+  animateCircle : (c, c2) ->
+    c.animate({"r" : 3}, 200)
+    c2.animate({"r" : 6}, 200)
+
+  dashArray : (length) ->
+    str = ""
+    for i in [0..(length/2)]
+      str += "2 "
+    return str
 
