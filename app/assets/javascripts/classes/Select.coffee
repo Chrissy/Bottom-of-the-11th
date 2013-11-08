@@ -7,10 +7,11 @@ class window.Select
     @select_element.data("select", @)
 
   setup : ->
+    $('body').addClass("loading")
     if @opponentId() == "0" || @currentId() == "0"
-      @cal.setupForSelect(@sel)
+      @cal.setupForSelect(@sel).promise().then( -> $('body').removeClass('loading'))
     else
-      @cal.setupDatesForRivalry(@opponentId(), @currentId())
+      @cal.setupDatesForRivalry(@opponentId(), @currentId()).promise().then( -> $('body').removeClass('loading'))
 
   buildWithRivals : ->
     self = @

@@ -6,7 +6,7 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="loading">
 
 <%= yield %>
 
@@ -24,6 +24,12 @@
   </select>
   <div id="cal-primary"></div>
 </nav>
+
+<div class="loading-indicator">
+	<div id="loadingProgressG">
+		<div id="loadingProgressG_1" class="loadingProgressG"></div>
+	</div>
+</div>
 
 </body>
 </html>

@@ -12,7 +12,7 @@ $ ->
 
   select.buildWithAll("first").promise().then( ->
     select2.buildWithRivals(0).promise().then( ->
-      calendar.setupForSelect(select.sel)
+      select.setup()
     )
   )
 
@@ -22,7 +22,7 @@ $ ->
   )
 
   select2.onChange( (self) ->
-    self.cal.setupDatesForRivalry(self.currentId(), self.opponentId())
+    self.setup()
   )
 
   displayType.change( (self) ->

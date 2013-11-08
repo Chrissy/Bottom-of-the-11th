@@ -64,3 +64,85 @@ nav {
   float: right;
   display: none;
 }
+
+.loading-indicator { 
+  display: none;
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  border-radius: 6px;
+  background: rgba(100,100,100,0.4);
+  margin: -25px 0 0 -100px;
+  top: 50%;
+  left: 50%;
+}
+
+body.loading .loading-indicator { display: block; }
+
+#loadingProgressG{
+  position: absolute;
+  top: 47px;
+  left: 43px;
+  width:106px;
+  height:8px;
+  overflow:hidden;
+  background-color:#000000;
+  -moz-border-radius:4px;
+  -webkit-border-radius:4px;
+  -ms-border-radius:4px;
+  -o-border-radius:4px;
+  border-radius:4px;
+}
+
+.loadingProgressG{
+  background-color:#FFFFFF;
+  margin-top:0;
+  margin-left:-106px;
+  -moz-animation-name:bounce_loadingProgressG;
+  -moz-animation-duration:2.3s;
+  -moz-animation-iteration-count:infinite;
+  -moz-animation-timing-function:linear;
+  -webkit-animation-name:bounce_loadingProgressG;
+  -webkit-animation-duration:2.3s;
+  -webkit-animation-iteration-count:infinite;
+  -webkit-animation-timing-function:linear;
+  -ms-animation-name:bounce_loadingProgressG;
+  -ms-animation-duration:2.3s;
+  -ms-animation-iteration-count:infinite;
+  -ms-animation-timing-function:linear;
+  -o-animation-name:bounce_loadingProgressG;
+  -o-animation-duration:2.3s;
+  -o-animation-iteration-count:infinite;
+  -o-animation-timing-function:linear;
+  animation-name:bounce_loadingProgressG;
+  animation-duration:2.3s;
+  animation-iteration-count:infinite;
+  animation-timing-function:linear;
+  width:106px;
+  height:8px;
+}
+
+@-moz-keyframes bounce_loadingProgressG{
+  0%{ margin-left:-106px; }
+  100%{ margin-left:106px; }
+}
+
+@-webkit-keyframes bounce_loadingProgressG{
+  0%{ margin-left:-106px; }
+  100%{ margin-left:106px; }
+}
+
+@-ms-keyframes bounce_loadingProgressG{
+  0%{ margin-left:-106px; }
+  100%{ margin-left:106px; }
+}
+
+@-o-keyframes bounce_loadingProgressG{
+  0%{ margin-left:-106px; }
+  100%{ margin-left:106px; }
+}
+
+@keyframes bounce_loadingProgressG{
+  0%{ margin-left:-106px; }
+  100%{ margin-left:106px; }
+}
