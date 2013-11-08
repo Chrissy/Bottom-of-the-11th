@@ -62,4 +62,5 @@ nav {
 
 #cal-primary {
   float: right;
+  display: none;
 }
