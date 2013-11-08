@@ -34,12 +34,16 @@ class PitchesController < ApplicationController
     @pitches_with_pitchers = []
     player = PlayerId.find(params[:pid])
 
-    params[:dates].each do |date|
-      if params[:bid]
-        pitches = RivalryPerformance.new(params[:bid], params[:pid], date).pitches
-        @pitches_with_pitchers.concat(pitches)
-      else
-        @pitches_with_pitchers.concat(player.performance(date).pitches)
+    if params[:count]
+      @pitches_with_pitchers = player.last_n_pitches(params[:count].to_i)
+    else 
+      params[:dates].each do |date|
+        if params[:bid]
+          pitches = RivalryPerformance.new(params[:bid], params[:pid], date).pitches
+          @pitches_with_pitchers.concat(pitches)
+        else
+          @pitches_with_pitchers.concat(player.performance(date).pitches)
+        end
       end
     end
     

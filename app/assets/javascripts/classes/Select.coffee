@@ -1,8 +1,7 @@
 class window.Select
 
-  constructor : (parent, calendar) ->
-    @select_element = $('<select class="player-select" data-placeholder="-----"/>')
-    $(parent).append(@select_element)
+  constructor : (selector, calendar) ->
+    @select_element = $(selector).first()
     @sel = @select_element.chosen()
     @cal = calendar
     @select_element.data("select", @)
@@ -43,7 +42,7 @@ class window.Select
     @sel.prepend("<option value='0'>--------</option>").trigger('liszt:updated')
   
   changePlayer : (id) ->
-    option = @select_element.find('option').filter("[value='#{id}']")[0]
+    option = @select_element.find("option[value='#{id}']")[0]
     @sel[0].selectedIndex = option.index
     @sel.trigger('liszt:updated')
     

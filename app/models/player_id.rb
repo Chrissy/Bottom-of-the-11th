@@ -83,6 +83,14 @@ class PlayerId < ActiveRecord::Base
     find_allstars(PlayerId.find(:all, :conditions => ["pitches=?",true]), limit)
   end
 
+  def last_n_pitches(n)
+    pitches = []
+    self.days_played.reverse.each do |code|
+      pitches.concat(Performance.new(self, code).pitches)
+      break if pitches.count > n
+    end
+    pitches.first(n)
+  end
 end
 
 class Performance

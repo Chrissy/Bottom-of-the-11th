@@ -65,8 +65,12 @@ class window.Calendar
     self = @
     dates = @getSelectedDatesAsArray()
     datesString = ""
-    for date in dates
-      datesString += "&dates[]=#{date}"
+    displayOption = $("#display-type").find("[value=#{ $("#display-type").val()} ]")
+    if displayOption.hasClass("last-n-pitches")
+      datesString = "&count=#{displayOption.val()}"
+    else
+      for date in dates
+        datesString += "&dates[]=#{date}"
     $.ajax(
       url: "/pitches/get.json?pid=#{@playerId + datesString}"
     ).done((data) ->

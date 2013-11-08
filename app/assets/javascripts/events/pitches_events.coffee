@@ -2,9 +2,10 @@ $ ->
   
   surface = new Surface
   calendar = new Calendar "cal-primary", surface
-  select = new Select "nav", calendar
-  select2 = new Select "nav", calendar
-  
+  select = new Select ".select-1", calendar
+  select2 = new Select ".select-2", calendar
+  displayType = $("#display-type").chosen()
+
   calendar.onChange( (self) -> 
     calendar.draw()
   )
