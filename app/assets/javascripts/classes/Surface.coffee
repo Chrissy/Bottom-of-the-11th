@@ -118,10 +118,7 @@ class window.Surface
       c2.attr("fill", "transparent")
       c2.attr("stroke", color)
       hit.data("hit", true)
-
-      window.setTimeout( -> 
-        self.animateCircle(c, c2)
-      , self.radius(hit.data("pitchSpeed"))/3 * 1000 + 200)
+      window.setTimeout(self.animateCircle, self.speed(hit),c, c2)
 
     for strike in strikes
       color = @hitTypeHash[strike.data("pitchAbbr")]
@@ -216,7 +213,7 @@ class window.Surface
     path.style.strokeDasharray =  if strike then "1 #{length} #{@.dashArray(length)}" else "#{length} #{length}"
     path.style.strokeDashoffset = if strike then '0' else length
     path.getBoundingClientRect()
-    path.style.transition = path.style.WebkitTransition = "stroke-dashoffset #{@.radius(pitch.data("pitchSpeed"))/2}s ease-out"
+    path.style.transition = path.style.WebkitTransition = "stroke-dashoffset #{@.speed(pitch)}ms ease-out"
     path.style.strokeDashoffset = if strike then (length * -1) else 0
 
   animateCircle : (c, c2) ->
@@ -228,4 +225,6 @@ class window.Surface
     for i in [0..(length/2)]
       str += "2 "
     return str
+
+  speed : (pitch) -> return @.radius(pitch.data("pitchSpeed")) * 500
 
