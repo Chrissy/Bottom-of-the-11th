@@ -226,5 +226,6 @@ class window.Surface
       str += "2 "
     return str
 
-  speed : (pitch) -> return @.radius(pitch.data("pitchSpeed")) * 500
+  speed : (pitch) -> 
+    return 5000 - (Math.pow(pitch.data("pitchSpeed"),4) / 30000)
 
