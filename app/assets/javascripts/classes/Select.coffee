@@ -6,6 +6,12 @@ class window.Select
     @cal = calendar
     @select_element.data("select", @)
 
+  setup : ->
+    if @opponentId() == "0" || @currentId() == "0"
+      @cal.setupForSelect(@sel)
+    else
+      @cal.setupDatesForRivalry(@opponentId(), @currentId())
+
   buildWithRivals : ->
     self = @
     stored_id = if @currentId() then @currentId() else 0

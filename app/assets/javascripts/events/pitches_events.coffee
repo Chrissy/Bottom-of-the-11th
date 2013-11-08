@@ -18,12 +18,13 @@ $ ->
 
   select.onChange( (self) ->
     self.opponentSelect().buildWithRivals()
-    if self.opponentId() == "0"
-      self.cal.setupForSelect(select.sel)
-    else
-      self.cal.setupDatesForRivalry(self.opponentId(), self.currentId())
+    self.setup()
   )
 
   select2.onChange( (self) ->
     self.cal.setupDatesForRivalry(self.currentId(), self.opponentId())
+  )
+
+  displayType.change( (self) ->
+    $('.select-1').first().data("select").setup()
   )

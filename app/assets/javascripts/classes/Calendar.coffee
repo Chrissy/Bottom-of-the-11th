@@ -3,7 +3,6 @@ class window.Calendar
   
   constructor: (@id, surface) ->
     @surface = surface
-    @displayOption = $("#display-type").find("[value=#{ $("#display-type").val()} ]")
     @cal = new Kalendae("cal-primary",
       viewStartDate : "04/06/2012",
       mode: 'multiple'
@@ -54,8 +53,8 @@ class window.Calendar
     self = @
     dates = @getSelectedDatesAsArray()
     datesString = ""
-    if @displayOption.hasClass("last-n-pitches")
-      datesString = "&count=#{@displayOption.val()}"
+    if @displayType() == "last-n-pitches"
+      datesString = "&count=#{@displayValue()}"
     else
       for date in dates
         datesString += "&dates[]=#{date}"
@@ -69,8 +68,8 @@ class window.Calendar
     self = @
     dates = @getSelectedDatesAsArray()
     datesString = ""
-    if @displayOption.hasClass("last-n-pitches")
-      datesString = "&count=#{@displayOption.val()}"
+    if @displayType() == "last-n-pitches"
+      datesString = "&count=#{@displayValue()}"
     else
       for date in dates
         datesString += "&dates[]=#{date}"
@@ -104,4 +103,11 @@ class window.Calendar
   onChange : (func) ->
     self = @
     @cal.subscribe('change', -> func(self))
+
+  displayValue : ->
+    return $("#display-type").find("[value=#{ $("#display-type").val()} ]").attr("value")
+
+  displayType : ->
+    return $("#display-type").find("[value=#{ $("#display-type").val()} ]").attr("data-type")
+
     
