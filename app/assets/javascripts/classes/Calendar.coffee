@@ -1,6 +1,4 @@
 class window.Calendar
-  autoSelectNumber : 5
-  
   constructor: (@id, surface) ->
     @surface = surface
     @cal = new Kalendae("cal-primary",
@@ -11,7 +9,7 @@ class window.Calendar
   setupForSelect : (select) ->
     self = @
     @setupDatesForPlayer(select.val()).promise().then((dates)  ->
-      self.selectLast(dates, 2)
+      self.selectLast(dates, self.selectNum())
       self.draw(@surface)
     )
 
@@ -29,7 +27,7 @@ class window.Calendar
     @opponentId = opponentId
     @getDatesForRivalry(playerId, opponentId).promise().then((dates) ->
       self.setupDates(dates)
-      self.selectLast(dates, 10)
+      self.selectLast(dates, self.selectNum())
       self.drawForRivalry()
     )
 
@@ -109,5 +107,8 @@ class window.Calendar
 
   displayType : ->
     return $("#display-type").find("[value=#{ $("#display-type").val()} ]").attr("data-type")
+
+  selectNum : ->
+    return if @displayType() == 'last-n-pitches' then 0 else @displayValue()
 
     
