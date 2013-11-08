@@ -3,6 +3,7 @@ class window.Calendar
   
   constructor: (@id, surface) ->
     @surface = surface
+    @displayOption = $("#display-type").find("[value=#{ $("#display-type").val()} ]")
     @cal = new Kalendae("cal-primary",
       viewStartDate : "04/06/2012",
       mode: 'multiple'
@@ -53,8 +54,11 @@ class window.Calendar
     self = @
     dates = @getSelectedDatesAsArray()
     datesString = ""
-    for date in dates
-      datesString += "&dates[]=#{date}"
+    if @displayOption.hasClass("last-n-pitches")
+      datesString = "&count=#{@displayOption.val()}"
+    else
+      for date in dates
+        datesString += "&dates[]=#{date}"
     $.ajax(
       url: "/pitches/get.json?bid=#{self.opponentId}&pid=#{self.playerId}#{datesString}"
     ).done((data) ->
@@ -65,9 +69,8 @@ class window.Calendar
     self = @
     dates = @getSelectedDatesAsArray()
     datesString = ""
-    displayOption = $("#display-type").find("[value=#{ $("#display-type").val()} ]")
-    if displayOption.hasClass("last-n-pitches")
-      datesString = "&count=#{displayOption.val()}"
+    if @displayOption.hasClass("last-n-pitches")
+      datesString = "&count=#{@displayOption.val()}"
     else
       for date in dates
         datesString += "&dates[]=#{date}"

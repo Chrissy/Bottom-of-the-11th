@@ -189,6 +189,14 @@ class Rivalry
     PlayerId.find(@player2_id)
   end
 
+  def last_n_pitches(n)
+    pitches = []
+    @rivalry_performances.reverse.each do |rivalry_performance|
+      pitches.concat(rivalry_performance.pitches)
+      break if pitches.count > n
+    end
+    pitches.first(n)
+  end
 end
 
 class RivalryPerformance < Performance
