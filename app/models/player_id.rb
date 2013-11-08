@@ -76,7 +76,7 @@ class PlayerId < ActiveRecord::Base
   end
 
   def self.allstar_batters(limit)
-    find_allstars(PlayerId.find(:all, :conditions => ["pitches=?",false]), limit)
+    find_allstars(PlayerId.find(:all, :conditions => ["pitches=?",false]), limit).delete_if { |batter| batter.pitches? }
   end
 
   def self.allstar_pitchers(limit)
