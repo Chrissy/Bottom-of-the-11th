@@ -50,14 +50,40 @@ select { width: 300px; }
 
 nav {
   position: absolute;
-  right: 0;
-  margin: 20px;
-  width: 300px;
+  right: 10px;
+  top: 10px;
+  width: auto;
 }
 
-.chzn-container {
-  margin-bottom: 10px;
-  float: right;
+.helper-text {
+  color: #CA427E;
+  font-weight: bold;
+  font-size: 12px;
+  top: -8px;
+  position: relative;
+  padding: 0 5px;
+}
+
+html body .chzn-container-single .chzn-single, 
+html body .chzn-container-single .chzn-single .chzn-single-with-drop, 
+html body .chzn-container-single .chzn-drop {
+  border: 1px solid #CA427E;
+  background: #480428;
+  color: #F9C5B8;
+  box-shadow: none;
+}
+
+html body .chzn-container-single .active-result.highlighted, 
+.chzn-container-single .group-option.active-result em, 
+.chzn-container-single .chzn-results .no-results {
+  color: #480428;
+  background: #CA427E;
+}
+
+html body .chzn-container-single .chzn-search input[type="text"] {
+  border-color: #CA427E;
+  background: url('chosen-sprite.png') no-repeat 100% -22px, #2E0F1D;
+  color: #480428;
 }
 
 #cal-primary {
