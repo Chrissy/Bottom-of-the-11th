@@ -2,7 +2,7 @@ class DatabaseTools
   def self.save_schedule_for_all_players(year)
     PlayerId.all.each do |player_id|
       schedule = get_player_games_for_year(player_id, year)
-      player_id.days_played = schedule.to_s
+      player_id.days_played.concat(schedule)
       player_id.save
     end
   end

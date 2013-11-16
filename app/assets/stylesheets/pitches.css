@@ -48,10 +48,66 @@ svg path {
 
 select { width: 300px; }
 
-nav {
+header {
+  width: 100%;
+  height: 32px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-bottom: 1px solid #CA427E;
+  background: #480428;
+  color: #F9C5B8;
+}
+
+.logo {
+  float: left;
+  text-indent: -9999%;
+  height: 100%;
+  width: 40px;
+  margin: 0;
+  border-right: 1px solid #CA427E;
+}
+
+.logo:after {
+  content: "";
+  float: left;
+  background: url('logo.png') center center no-repeat;
+  width: 100%;
+  height: 100%;
+}
+
+#presets, #presets_chzn, .top-nav { float: right; }
+#presets_chzn, #presets_chzn .chzn-single { height: 100%; }
+
+#presets_chzn .chzn-single {
+  border-width: 0 1px;
+  border-radius: 0;
+  box-sizing: border-box;
+  padding-top: 4px;
+}
+
+header .chzn-single div b {
+  position: relative;
+  top : 4px;
+}
+
+.top-nav {
+  margin: 0 7px 0 8px;
+}
+
+.top-nav a { 
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #CA427E;
+  text-decoration: none;
+  position: relative;
+  top: 6px;
+}
+
+nav.players-select {
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 46px;
   width: auto;
 }
 

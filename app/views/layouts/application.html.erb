@@ -7,10 +7,23 @@
   <%= csrf_meta_tags %>
 </head>
 <body class="loading">
+	<header class="header">
+		<h1 class="logo">Bottom of the 11th</h1>
+		<nav class="top-nav">
+			<a href="#">Twitter</a>
+			<a href="#">Github</a>
+		</nav>
+		<select id="presets">
+	  	<option value="50">Clayton Kershaw likes to strike people out</option>
+	  	<option value="100">R.A. Dickey throws a lot of Knuckleballs</option>
+	  	<option value="200">Aroldis Chapman throws the ball real fast</option>
+	  	<option value="1">Adam Wainright has a very good curveball</option>
+  	</select>
+	</header>
 
 <%= yield %>
 
-<nav>
+<nav class="players-select">
   <select class="select-1 player-select" data-placeholder="-----"></select>
   <span class="helper-text">Vs.</span>
   <select class="select-2 player-select" data-placeholder="-----"></select>
