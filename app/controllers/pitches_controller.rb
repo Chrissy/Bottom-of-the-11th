@@ -1,6 +1,11 @@
 require 'Game'
 
-class PitchesController < ApplicationController  
+class PitchesController < ApplicationController 
+
+  caches_page :all_players
+  caches_page :players_faced, :cache_path => Proc.new {|controller| controller.params }
+  caches_page :get_pitches, :cache_path => Proc.new {|controller| controller.params }
+  caches_page :dates_faced, :cache_path => Proc.new {|controller| controller.params }
   
   def index
     @game = Game.find_by_date(2012,5,13)[0]

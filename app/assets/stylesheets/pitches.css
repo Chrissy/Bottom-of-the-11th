@@ -33,7 +33,10 @@ svg path {
   bottom: 40px;
 }
 
-#surface svg { border: 1px solid #555; }
+#surface svg { 
+  border: 1px solid #222;
+  background: rgba(5, 0 , 10, 0.8); 
+}
 
 .surface .details {
   position: absolute;
