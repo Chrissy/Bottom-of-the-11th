@@ -1,4 +1,13 @@
 class DatabaseTools
+
+  def self.initialize
+    save_ids_for_all_years()
+    save_pitcher_for_all_players()
+    save_player_teams_for_all_years()
+    save_schedule_for_all_players_for_all_years()
+    save_allstar_appearances_for_all_years()
+  end
+
   def self.save_schedule_for_all_players(year)
     PlayerId.all.each do |player_id|
       schedule = get_player_games_for_year(player_id, year)
@@ -22,6 +31,13 @@ class DatabaseTools
       all_days_played.concat(schedule)
     end
     all_days_played
+  end
+
+  def self.save_player_teams_for_all_years
+    years = [2010,2011,2012,2013]
+    years.each do |year|
+      save_player_teams_for_year(year)
+    end
   end
 
   def self.save_player_teams_for_year(year)
@@ -73,6 +89,13 @@ class DatabaseTools
         player.pitches = player.pitcher?
         player.save
       end
+    end
+  end
+
+  def self.save_ids_for_all_years
+    years = [2010,2011,2012,2013]
+    years.each do |year|
+      save_player_ids_for_year(year)
     end
   end
   
@@ -144,13 +167,20 @@ class DatabaseTools
     players
   end
 
+  def self.save_allstar_appearances_for_all_years
+    years = [2010,2011,2012,2013]
+    years.each do |year|
+      add_allstar_appearances_to_player_ids(year)
+    end
+  end
+
   def self.add_allstar_appearances_to_player_ids(year)
     Game.find_by_month(year,7).find { |game| game.game_type == "A"}.get_rosters.each do |roster|
       roster.players.each do |player|
         if PlayerId.exists?(player.pid)
           pid = PlayerId.find(player.pid)
           if pid.allstar_appearances
-            pid.allstar_appearances.push(year)
+            pid.allstar_appearances.push(year).uniq!
           else
             pid.allstar_appearances = [year]
           end
